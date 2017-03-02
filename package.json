@@ -1,0 +1,24 @@
+{
+  "name": "angular-file-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lostam/angularFileSystem.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lostam/angularFileSystem/issues"
+  },
+  "homepage": "https://github.com/Lostam/angularFileSystem#readme",
+  "dependencies": {
+    "@types/angular": "^1.6.7",
+    "angular": "^1.6.2",
+    "systemjs": "^0.20.9"
+  }
+}

@@ -1,0 +1,11 @@
+.tree-folder-open span::before{
+    content : url(./../../../imgs/folder-open.png);
+}
+
+.tree-folder-close span::before{
+    content : url(./../../../imgs/folder-close.png);
+}
+
+.tree-folder span{
+    cursor: pointer;
+}

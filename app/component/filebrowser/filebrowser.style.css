@@ -1,0 +1,11 @@
+.filebrowser{
+     display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+}
+
+.tree{
+    user-select: none;
+    border: 1px solid black;
+    width: 30%;
+}

@@ -1,0 +1,13 @@
+<ul>
+    <li class="tree-folder"
+        ng-init="toggle=true"
+        ng-class="{'tree-folder-open' : toggle ,'tree-folder-close' : (!toggle)}"
+        ng-repeat="item in $ctrl.filesystem"
+        ng-mousedown="toggle=!toggle ; $ctrl.handleClick($event)">
+        <span ng-click="$ctrl.print();$event.stopPropagation();"
+        >{{item.name}}  </span>
+        <tree ng-show="toggle" ng-if="item.getType()=='folder'" filesystem="item.children">
+            g
+        </tree>
+    </li>
+</ul>
