@@ -1,8 +1,0 @@
-    <ul>
-        <li ng-repeat="item in $ctrl.filesystem">
-            {{item.name}}
-            <tree ng-if="item.getType()=='folder'" filesystem="item.children">
-                g
-            </tree>
-        </li>
-    </ul>

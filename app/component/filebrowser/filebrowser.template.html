@@ -1,7 +1,10 @@
-Filebrowser
-<div class="filebrowser">
-    <div class="tree">
-        <tree filesystem="$ctrl.filesystem.getFileSystem()"></tree>
+<div ng-click="$ctrl.turnContextOff()" style="height: 100%" oncontextmenu="return false">
+    <div class="filebrowser">
+        <div class="tree">
+            <tree folder="$ctrl.filesystem.getFileSystem()[0]"
+            </tree>
+        </div>
+        <content></content>
     </div>
-    <content></content>
+    <contextmenu ng-if="$ctrl.contextMenuToggle" ng-style = "{left : $ctrl.posX, top: $ctrl.posY}"></contextmenu>
 </div>

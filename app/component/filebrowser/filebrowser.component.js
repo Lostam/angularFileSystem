@@ -1,33 +1,31 @@
 "use strict";
 var appModule_1 = require("../../common/appModule");
-var Services_1 = require("../../Services/Services");
+var filesystem_service_1 = require("../../Services/filesystem.service");
 var FilebrowserController = (function () {
-    function FilebrowserController() {
-        this.filesystem = new Services_1.FileSystem(this);
-        console.log(">>>>>>>>>>", this.filesystem);
-        // this.filesystem = [
-        //     {
-        //         id: 0, name: "root-folder", children: [
-        //         {
-        //             id: 1, name: "folder1", children: [
-        //             {id: 4, name: "file2", content: "yes", type: "file"}
-        //         ], type: "folder"
-        //         },
-        //         {
-        //             id: 2, name: "folder2", children: [], type: "folder"
-        //         },
-        //         {
-        //             id: 3, name: "file1", content: 'this', type: "file"
-        //         }
-        //     ], type: "folder"
-        //     }
-        // ];
+    function FilebrowserController($rootScope) {
+        this.$rootScope = $rootScope;
+        this.filesystem = new filesystem_service_1.FileSystemService(this);
+        this.contextMenuToggle = false;
+        this.posX = "0px";
+        this.posY = "0px";
+        this.contextMenuPosition = "{top : this.posX ; left: this.posY}";
+        this.rightClickListener();
     }
-    ;
+    FilebrowserController.prototype.turnContextOff = function () {
+        this.contextMenuToggle = false;
+    };
+    FilebrowserController.prototype.rightClickListener = function () {
+        var _this = this;
+        this.$rootScope.$on('rightClick', function (scope, event) {
+            _this.posX = (event.pageX).toString() + "px";
+            _this.posY = (event.pageY).toString() + "px";
+            _this.contextMenuToggle = true;
+        });
+    };
     return FilebrowserController;
 }());
 exports.FilebrowserController = FilebrowserController;
-var filebrowser = appModule_1.appModule.component("filebrowser", {
+appModule_1.appModule.component("filebrowser", {
     templateUrl: "app/component/filebrowser/filebrowser.template.html",
     controller: FilebrowserController,
 });

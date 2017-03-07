@@ -1,7 +1,8 @@
 "use strict";
-//--------------------------FileSystem class--------------------------//
-var FileSystem = (function () {
-    function FileSystem(self) {
+var appModule_1 = require("../common/appModule");
+//--------------------------FileSystemService class--------------------------//
+var FileSystemService = (function () {
+    function FileSystemService(self) {
         this.filesystem = [];
         this.rootFolder = new Folder("root", 0);
         this.filesystem.push(this.rootFolder);
@@ -9,125 +10,11 @@ var FileSystem = (function () {
         this.readFromLocalStorage();
         this.uiSelf = self;
     }
-    FileSystem.prototype.getFileSystem = function () {
+    FileSystemService.prototype.getFileSystem = function () {
         return this.filesystem;
     };
     ;
-    FileSystem.prototype.addFolder = function (name, parentId) {
-        var parent = this.getItem(parentId);
-        if (parent) {
-            if (!(parent.isChildExist(name))) {
-                var folder = new Folder(name, this.lastId);
-                parent.addChild(folder);
-                this.lastId++;
-                return true;
-            }
-            return false;
-        }
-        return false;
-    };
-    ;
-    FileSystem.prototype.addFile = function (name, parentId, content) {
-        var parent = this.getItem(parentId);
-        if (parent) {
-            if (!(parent.isChildExist(name))) {
-                var file = new File(name, this.lastId, content);
-                parent.addChild(file);
-                this.lastId++;
-                return true;
-            }
-            return false;
-        }
-        return false;
-    };
-    ;
-    FileSystem.prototype.reName = function (id, newName) {
-        var item = this.getItem(id);
-        if (item) {
-            var parent_1 = this.getParentById(id, this.filesystem, this.filesystem[0]);
-            if (!(parent_1.isChildExist(newName))) {
-                item.setName(newName);
-                return true;
-            }
-            return false;
-        }
-        console.log("item does no exist");
-        return false;
-    };
-    ;
-    FileSystem.prototype.openFile = function (id) {
-        var item = this.getItem(id);
-        if (item) {
-            return item.getContent();
-        }
-        return false;
-    };
-    ;
-    FileSystem.prototype.deleteItem = function (id) {
-        var parent = this.getParentById(id, this.filesystem, this.filesystem[0]);
-        if (parent) {
-            parent.deleteChild(id);
-        }
-    };
-    ;
-    FileSystem.prototype.getIdByPath = function (path) {
-        var _this = this;
-        var getPathArrayFromPathString = function (path) {
-            if (path.endsWith("/")) {
-                path = path.substring(0, path.length - 1);
-            }
-            return path.split("/");
-        };
-        var findIdInTree = function (items, fatherId) {
-            if (pathArray.length) {
-                var pathName = pathArray.shift();
-                for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
-                    var item = items_1[_i];
-                    if (item.getName() == pathName) {
-                        if (pathArray.length == 0) {
-                            if (item.getType() == "file") {
-                                _this.uiSelf.switchCase(item.getId(), "open");
-                            }
-                            return (item.getType() == "file") ? fatherId : item.getId();
-                        }
-                        return findIdInTree(item.getChildren(), item.getId());
-                    }
-                }
-                alert("<<<<<<<<WRONG PATH>>>>>>>>");
-                return false;
-            }
-        };
-        var pathArray = getPathArrayFromPathString(path);
-        return findIdInTree(this.filesystem, -1);
-    };
-    ;
-    FileSystem.prototype.getPathById = function (id) {
-        var currentPathArray = [];
-        var currentPath = "";
-        findAncestryName(id, this.filesystem);
-        currentPathArray.reverse();
-        currentPathArray.forEach(function (item) {
-            currentPath = currentPath.concat(item, "/");
-        });
-        return currentPath;
-        function findAncestryName(index, items) {
-            for (var _i = 0, items_2 = items; _i < items_2.length; _i++) {
-                var item = items_2[_i];
-                if (item.getType() == "folder") {
-                    if (findAncestryName(index, item.getChildren())) {
-                        currentPathArray.push(item.getName());
-                        return true;
-                    }
-                }
-                if (item.getId() == index) {
-                    currentPathArray.push(item.getName());
-                    return true;
-                }
-            }
-        }
-    };
-    ;
-    FileSystem.prototype.getItem = function (identifier) {
+    FileSystemService.prototype.getItem = function (identifier) {
         if ((typeof identifier) == "string") {
         }
         if ((typeof identifier) == "number") {
@@ -138,9 +25,9 @@ var FileSystem = (function () {
         }
     };
     ;
-    FileSystem.prototype.getItemById = function (id, items) {
-        for (var _i = 0, items_3 = items; _i < items_3.length; _i++) {
-            var item = items_3[_i];
+    FileSystemService.prototype.getItemById = function (id, items) {
+        for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
+            var item = items_1[_i];
             if (item) {
                 if (item.getId() == id) {
                     return item;
@@ -155,14 +42,14 @@ var FileSystem = (function () {
         }
     };
     ;
-    FileSystem.prototype.getParentIdById = function (id) {
+    FileSystemService.prototype.getParentIdById = function (id) {
         var parent = this.getParentById(id, this.filesystem, this.filesystem[0]);
         return parent.getId();
     };
     ;
-    FileSystem.prototype.getParentById = function (id, items, parent) {
-        for (var _i = 0, items_4 = items; _i < items_4.length; _i++) {
-            var item = items_4[_i];
+    FileSystemService.prototype.getParentById = function (id, items, parent) {
+        for (var _i = 0, items_2 = items; _i < items_2.length; _i++) {
+            var item = items_2[_i];
             if (item) {
                 if (item.getId() == id) {
                     return parent;
@@ -177,7 +64,7 @@ var FileSystem = (function () {
         }
     };
     ;
-    FileSystem.prototype.readFromLocalStorage = function () {
+    FileSystemService.prototype.readFromLocalStorage = function () {
         var flattenedFileSystem;
         if (localStorage.getItem("My Flattened FileSystem")) {
             flattenedFileSystem = JSON.parse(localStorage.getItem("My Flattened FileSystem"));
@@ -207,7 +94,7 @@ var FileSystem = (function () {
         }
     };
     ;
-    FileSystem.prototype.saveToLocalStorage = function () {
+    FileSystemService.prototype.saveToLocalStorage = function () {
         var flattenedFileSystem = [];
         var flattenedFileSystemString;
         fileSystemflattenerFunction(this.filesystem, -1);
@@ -215,8 +102,8 @@ var FileSystem = (function () {
         localStorage.setItem("My Flattened FileSystem", flattenedFileSystemString);
         localStorage.setItem("Last Id", this.lastId);
         function fileSystemflattenerFunction(items, fatherId) {
-            for (var _i = 0, items_5 = items; _i < items_5.length; _i++) {
-                var item = items_5[_i];
+            for (var _i = 0, items_3 = items; _i < items_3.length; _i++) {
+                var item = items_3[_i];
                 if (item.getType() == "folder") {
                     flattenedFileSystem.push({
                         id: item.getId(),
@@ -239,9 +126,9 @@ var FileSystem = (function () {
         }
     };
     ;
-    return FileSystem;
+    return FileSystemService;
 }());
-exports.FileSystem = FileSystem;
+exports.FileSystemService = FileSystemService;
 //----------------------------Folder class--------------------//
 var Folder = (function () {
     function Folder(name, id) {
@@ -423,4 +310,5 @@ var History = (function () {
     ;
     return History;
 }());
-//# sourceMappingURL=Services.js.map
+appModule_1.appModule.service("fileSystemService", FileSystemService);
+//# sourceMappingURL=filesystem.service.js.map

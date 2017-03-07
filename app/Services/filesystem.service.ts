@@ -1,7 +1,7 @@
 "use strict";
-
-//--------------------------FileSystem class--------------------------//
-export class FileSystem {
+import {appModule} from "../common/appModule";
+//--------------------------FileSystemService class--------------------------//
+export class FileSystemService {
     filesystem = [];
     rootFolder;
     lastId;
@@ -17,118 +17,6 @@ export class FileSystem {
 
     getFileSystem () {
         return this.filesystem;
-    };
-
-    addFolder (name, parentId) {
-        let parent = this.getItem(parentId);
-        if (parent) {
-            if (!(parent.isChildExist(name))) {
-                let folder = new Folder(name, this.lastId);
-                parent.addChild(folder);
-                this.lastId++;
-                return true;
-            }
-            return false
-        }
-        return false;
-    };
-
-    addFile (name, parentId, content) {
-        let parent = this.getItem(parentId);
-        if (parent) {
-            if (!(parent.isChildExist(name))) {
-                let file = new File(name, this.lastId, content);
-                parent.addChild(file);
-                this.lastId++;
-                return true;
-            }
-            return false
-        }
-        return false
-    };
-
-    reName (id, newName) {
-        let item = this.getItem(id);
-        if (item) {
-            let parent = this.getParentById(id, this.filesystem,this.filesystem[0]);
-            if (!(parent.isChildExist(newName))) {
-                item.setName(newName);
-                return true;
-            }
-            return false;
-        }
-        console.log("item does no exist");
-        return false
-    };
-
-    openFile (id) {
-        let item = this.getItem(id);
-        if (item) {
-            return item.getContent();
-        }
-        return false
-    };
-
-    deleteItem (id) {
-        let parent = this.getParentById(id, this.filesystem,this.filesystem[0]);
-        if (parent) {
-            parent.deleteChild(id);
-        }
-    };
-
-    getIdByPath (path) {
-        const getPathArrayFromPathString = path => {
-            if (path.endsWith("/")) {
-                path = path.substring(0, path.length - 1);
-            }
-            return path.split("/");
-        };
-        const findIdInTree =(items, fatherId) => {
-            if (pathArray.length) {
-                let pathName = pathArray.shift();
-                for (let item of items) {
-                    if (item.getName() == pathName) {
-                        if (pathArray.length == 0) {
-                            if (item.getType() == "file") {
-                                this.uiSelf.switchCase(item.getId(), "open");
-                            }
-                            return (item.getType() == "file") ? fatherId : item.getId();
-                        }
-                        return findIdInTree(item.getChildren(), item.getId());
-                    }
-                }
-                alert("<<<<<<<<WRONG PATH>>>>>>>>");
-                return false;
-            }
-        };
-        let pathArray = getPathArrayFromPathString(path);
-        return findIdInTree(this.filesystem,-1);
-
-    };
-
-    getPathById (id) {
-        let currentPathArray = [];
-        let currentPath = "";
-        findAncestryName(id, this.filesystem);
-        currentPathArray.reverse();
-        currentPathArray.forEach(function (item) {
-            currentPath = currentPath.concat(item, "/");
-        });
-        return currentPath;
-        function findAncestryName(index, items) {
-            for (let item of items) {
-                if (item.getType() == "folder") {
-                    if (findAncestryName(index, item.getChildren())) {
-                        currentPathArray.push(item.getName());
-                        return true;
-                    }
-                }
-                if (item.getId() == index) {
-                    currentPathArray.push(item.getName());
-                    return true;
-                }
-            }
-        }
     };
 
     getItem (identifier) {
@@ -433,7 +321,7 @@ class History {
     };
 }
 
-
+appModule.service("fileSystemService",FileSystemService);
 
 
 

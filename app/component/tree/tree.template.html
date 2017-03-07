@@ -1,13 +1,29 @@
 <ul>
-    <li class="tree-folder"
-        ng-init="toggle=true"
-        ng-class="{'tree-folder-open' : toggle ,'tree-folder-close' : (!toggle)}"
-        ng-repeat="item in $ctrl.filesystem"
-        ng-mousedown="toggle=!toggle ; $ctrl.handleClick($event)">
-        <span ng-click="$ctrl.print();$event.stopPropagation();"
-        >{{item.name}}  </span>
-        <tree ng-show="toggle" ng-if="item.getType()=='folder'" filesystem="item.children">
-            g
+
+    <li ng-mousedown="$ctrl.clickOnItemHandle($event)" ng-if="$ctrl.folder.getType()=='folder'">
+        <span ng-mousedown="$ctrl.openContent($event,$ctrl.folder.getChildren())">
+            {{$ctrl.folder.getName()}}
+        </span>
+        <tree ng-if="$ctrl.showState"
+                ng-repeat="item in $ctrl.folder.getChildren()"
+              folder="item">
         </tree>
     </li>
 </ul>
+
+
+<!--<ul ng-repeat="item in $ctrl.filesystem" ng-if="$ctrl.toggle">-->
+    <!--<li class="tree-folder"-->
+        <!--oncontextmenu="return false">-->
+        <!--<span ng-mousedown="$ctrl.handleClick($event,item.getId())">-->
+            <!--{{item.name}}-->
+        <!--</span>-->
+        <!--<div ng-if="item.getType()=='folder'" ng-repeat="itam in item.children">-->
+            <!--<tree ng-if="item.getType()=='folder'"-->
+                  <!--filesystem-->
+                <!--toggle="$ctrl.childToggle">-->
+            <!--</tree>-->
+        <!--</div>-->
+    <!--</li>-->
+<!--</ul>-->
+<!--ng-class="{'tree-folder-open' : $ctrl.toggle ,'tree-folder-close' : (!$ctrl.toggle)}"-->

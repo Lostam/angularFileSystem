@@ -1,3 +1,8 @@
-<div class="content">
-    Content
+<div class="content" ng-repeat="item in $ctrl.children">
+    <span class="big-file"
+          ng-mousedown="$ctrl.showContextMenu($event)"
+          ng-if="item.getType()=='file'">{{item.getName()}}</span>
+    <span class="big-folder"
+          ng-mousedown="$ctrl.showContextMenu($event)"
+          ng-if="item.getType()=='folder'">{{item.getName()}}</span>
 </div>
